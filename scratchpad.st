@@ -23,11 +23,11 @@ Object subclass: Animal [
 
   printOn: stream [
     super printOn: stream.
-    stream nextPutAll: ' named '.
-    stream nextPutAll: name.
-    stream nextPutAll: ' who is '.
-    stream nextPutAll: age printString.
-    stream nextPutAll: ' years old'.
+    stream nextPutAll: ' named ';
+      nextPutAll: name;
+      nextPutAll: ' who is ';
+      nextPutAll: age printString;
+      nextPutAll: ' years old'.
   ]
 
   initialize: n age: a [
