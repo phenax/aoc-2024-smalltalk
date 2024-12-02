@@ -20,6 +20,22 @@ Array extend [
     ^1 to: self first size collect: [:c|
       1 to: self size collect: [:r| (self at: r) at: c] ]
   ]
+
+  slidingWindow: window [ self slidingWindow: window collect: [:x| x] ]
+
+  slidingWindow: window collect: block [
+    ^(1 to: self size) inject: (Array new: 0) into: [:list :start|
+      |end|
+      end := start + window - 1.
+      (end <= self size)
+        ifTrue: [ list copyWith: (block value: (self copyFrom: start to: end)). ]
+        ifFalse: [ list ]
+    ]
+  ]
+
+  withIndexRemoved: index [
+    ^(self copyFrom: 1 to: index - 1), (self copyFrom: index + 1 to: self size).
+  ]
 ]
 
 Object subclass: Challenge [
@@ -35,13 +51,15 @@ Object subclass: Challenge [
     (self respondsTo: #solve1) ifTrue: [
       s1 := self solve1.
       'Part 1: ' display. s1 printNl.
-      self expect: s1 toEqual: ctx solutions first.
+      (ctx solutions first) ifNotNil: [
+        self expect: s1 toEqual: ctx solutions first. ].
     ].
 
     (self respondsTo: #solve2) ifTrue: [
       s2 := self solve2.
       'Part 2: ' display. s2 printNl.
-      self expect: s2 toEqual: ctx solutions second.
+      (ctx solutions second) ifNotNil: [
+        self expect: s2 toEqual: ctx solutions second. ].
     ].
   ]
 
