@@ -11,6 +11,7 @@ Symbol extend [
 Object extend [
   tap: block [ block value: self ]
   ifNil: a ifNil: b [ ^(self ifNil: a) ifNil: b ]
+  ifNil: a ifNil: b ifNil: c [ ^(self ifNil: a ifNil: b) ifNil: c ]
 ]
 
 Behavior extend [
@@ -25,6 +26,11 @@ Iterable extend [
 ]
 
 ArrayedCollection extend [
+  ifEmpty: block [ ^self isEmpty ifTrue: block ifFalse: [self] ]
+  ifNotEmpty: block [ ^self isNotEmpty ifTrue: block ifFalse: [self] ]
+  isEmpty [ ^(self size == 0) ]
+  isNotEmpty [ ^(self size == 0) not ]
+
   transposed [
     ^1 to: self first size collect: [:c|
       1 to: self size collect: [:r| (self at: r) at: c] ]
