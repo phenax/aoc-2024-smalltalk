@@ -30,8 +30,8 @@ Challenge subclass: Day1 [
   ]
 
   occuranceCounts [
+    |count|
     ^idList1 collect: [:id1|
-      |count|
       count := idList2 count: [:id2| id1 = id2].
       id1 * count.
     ]

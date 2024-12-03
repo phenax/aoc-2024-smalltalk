@@ -10,12 +10,17 @@
         buildInputs = with pkgs; [
           gnu-smalltalk
           just
+          nodePackages.nodemon
           (pkgs.writeShellScriptBin "smalltalk" ''
             ${gnu-smalltalk}/bin/gst "$@"
           '')
         ];
       };
     in flake-utils.lib.eachDefaultSystem (system:
-      let pkgs = import nixpkgs { inherit system; };
-      in { devShells.default = shell { inherit pkgs; }; });
+      let
+        pkgs = import nixpkgs { inherit system; };
+      in {
+        devShells.default = shell { inherit pkgs; };
+      }
+    );
 }
