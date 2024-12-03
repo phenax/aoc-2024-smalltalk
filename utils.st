@@ -1,4 +1,5 @@
 FileStream fileIn: 'extns.st'.
+FileStream fileIn: 'parser.st'.
 
 Object subclass: Challenge [
   |ctx|
