@@ -1,51 +1,4 @@
-Symbol extend [
-  proc [ ^[:obj| obj perform: self] ]
-  with: arg [
-    ^[:obj| obj perform: self withArguments: {arg}]
-  ]
-  on: obj [
-    ^[:arg| obj perform: self withArguments: {arg}]
-  ]
-]
-
-Object extend [
-  tap: b [ b value: self ]
-  ifNil: a ifNil: b [ ^(self ifNil: a) ifNil: b ]
-  ifNil: a ifNil: b ifNil: c [ ^(self ifNil: a ifNil: b) ifNil: c ]
-]
-
-Behavior extend [
-  createAccessor: sym [ self createGetter: sym; createSetter: sym. ]
-  createSetter: sym [ self createSetMethod: (sym asString) ]
-  createGetter: sym [ self createGetMethod: (sym asString) ]
-]
-
-Iterable extend [
-  sum [ ^self inject: 0 into: [:sum :item| sum + item] ]
-  product [ ^self inject: 1 into: [:sum :item| sum * item] ]
-]
-
-ArrayedCollection extend [
-  transposed [
-    ^1 to: self first size collect: [:c|
-      1 to: self size collect: [:r| (self at: r) at: c] ]
-  ]
-
-  slidingWindow: window [ ^self slidingWindow: window collect: [:x|x] ]
-  slidingWindow: window collect: block [
-    ^(1 to: self size) inject: {} into: [:list :start|
-      |end|
-      end := start + window - 1.
-      (end <= self size)
-        ifTrue: [ list copyWith: (block value: (self copyFrom: start to: end)). ]
-        ifFalse: [ list ]
-    ]
-  ]
-
-  withIndexRemoved: index [
-    ^(self first: index - 1), (self copyFrom: index + 1 to: self size).
-  ]
-]
+FileStream fileIn: 'extns.st'.
 
 Object subclass: Challenge [
   |ctx|
@@ -84,7 +37,14 @@ Object subclass: Context [
   Context class >> new: name [ ^super new initialize: name. ]
   initialize: name [ ctxName := name. ]
 
-  solve: challenge [ (challenge new: self) solve. ]
+  solve: challenge [
+    [(challenge new: self) solve]
+      on: Error do: [:ex|
+        Transcript cr; show: 'Error: ', ex messageText; cr; cr; flush.
+        ex signalingContext backtrace.
+        ObjectMemory quit: 1.
+      ]
+  ]
 
   solutions [
     ^(useTestInput ifTrue: [testSolutions] ifFalse: [solutions])
