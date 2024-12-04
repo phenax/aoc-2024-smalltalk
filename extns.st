@@ -21,6 +21,7 @@ Behavior extend [
 ]
 
 Iterable extend [
+  sumWith: block [ ^(self collect: block) sum ]
   sum [ ^self inject: 0 into: [:sum :item| sum + item] ]
   product [ ^self inject: 1 into: [:sum :item| sum * item] ]
 ]
@@ -31,9 +32,11 @@ ArrayedCollection extend [
   isEmpty [ ^(self size == 0) ]
   isNotEmpty [ ^(self size == 0) not ]
 
+  row: row column: col [ ^(self at: row) at: col ]
+
   transposed [
     ^1 to: self first size collect: [:c|
-      1 to: self size collect: [:r| (self at: r) at: c] ]
+      1 to: self size collect: [:r| self row: r column: c] ]
   ]
 
   slidingWindow: window [ ^self slidingWindow: window collect: [:x|x] ]
@@ -50,4 +53,10 @@ ArrayedCollection extend [
   withIndexRemoved: index [
     ^(self first: index - 1), (self copyFrom: index + 1 to: self size).
   ]
+]
+
+Boolean extend [
+  or: a or: b [ ^(self or:a) or:b ]
+  or: a or: b or: c [ ^(self or:a or:b) or:c ]
+  or: a or: b or: c or: d [ ^(self or:a or:b or:c) or:d ]
 ]
