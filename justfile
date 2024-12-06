@@ -1,5 +1,5 @@
 run_ day:
-  time smalltalk {{day}}/main.st
+  time smalltalk --no-gc-message {{day}}/main.st
 
 run day:
   just run_ $(printf 'day%02d' {{day}});

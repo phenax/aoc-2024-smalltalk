@@ -12,6 +12,15 @@ Object extend [
   tap: block [ block value: self ]
   ifNil: a ifNil: b [ ^(self ifNil: a) ifNil: b ]
   ifNil: a ifNil: b ifNil: c [ ^(self ifNil: a ifNil: b) ifNil: c ]
+
+  caseOf: pattern [
+    |fallback|
+    pattern collect: [:assoc|
+      (self = assoc key) ifTrue: [^(assoc value) value].
+      (assoc key = #_) ifTrue: [fallback := assoc value].
+    ].
+    ^fallback ifNotNil: [fallback value]
+  ]
 ]
 
 Behavior extend [
@@ -33,6 +42,11 @@ ArrayedCollection extend [
   isNotEmpty [ ^(self size == 0) not ]
 
   row: row column: col [ ^(self at: row) at: col ]
+  row: row column: col put: value [
+    |arr|
+    arr := self at: row.
+    arr at: col put: value.
+  ]
 
   transposed [
     ^1 to: self first size collect: [:c|
