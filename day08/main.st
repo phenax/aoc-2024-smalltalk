@@ -1,14 +1,15 @@
-FileStream fileIn: 'utils.st'.
-ctx := (Context new: 'day08')
-  testSolutions: #(14 34);
-  solutions: #(289 1030);
-  useTestInput: true.
-
 Challenge subclass: Day8 [
+  setup [
+    context useTestInput: true;
+      testSolutions: #(14 34);
+      solutions: #(289 1030).
+  ]
+]
+
+Day8 extend [
   |antennasByFrequencyLabel rows columns|
 
   loadInput: inputFile [
-    |gen n|
     self parseInputLines: inputFile lines upToEnd.
   ]
 
@@ -96,5 +97,3 @@ Object subclass: Antenna [
   ]
 ]
 Antenna createGetter: #label; createGetter: #position.
-
-ctx solve: Day8.

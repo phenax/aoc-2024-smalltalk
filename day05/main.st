@@ -1,10 +1,12 @@
-FileStream fileIn: 'utils.st'.
-ctx := (Context new: 'day05')
-  testSolutions: #(143 123);
-  solutions: #(6267 5184);
-  useTestInput: true.
-
 Challenge subclass: Day5 [
+  setup [
+    context useTestInput: true;
+      testSolutions: #(143 123);
+      solutions: #(6267 5184).
+  ]
+]
+
+Day5 extend [
   |rules updates correctedUpdates|
 
   loadInput: inputFile [
@@ -49,5 +51,3 @@ Challenge subclass: Day5 [
     ]
   ]
 ]
-
-ctx solve: Day5.

@@ -1,12 +1,14 @@
-FileStream fileIn: 'utils.st'.
-ctx := (Context new: 'day03')
-  testSolutions: #(161 48);
-  solutions: #(174960292 56275602);
-  useTestInput: true.
+Challenge subclass: Day3 [
+  setup [
+    context useTestInput: true;
+      testSolutions: #(161 48);
+      solutions: #(174960292 56275602).
+  ]
+]
 
 FileStream fileIn: 'day03/expr.st'.
 
-Challenge subclass: Day3 [
+Day3 extend [
   |expressions|
 
   loadInput: inputFile [
@@ -67,5 +69,3 @@ Challenge subclass: Day3 [
       ifNil: [ ^ParserError signal: 'Invalid method' ]
   ]
 ]
-
-ctx solve: Day3.

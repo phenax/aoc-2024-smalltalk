@@ -1,10 +1,12 @@
-FileStream fileIn: 'utils.st'.
-ctx := (Context new: 'day01')
-  testSolutions: #(11 31);
-  solutions: #(2430334 28786472);
-  useTestInput: true.
-
 Challenge subclass: Day1 [
+  setup [
+    context useTestInput: true;
+      testSolutions: #(11 31);
+      solutions: #(2430334 28786472).
+  ]
+]
+
+Day1 extend [
   |idList1 idList2|
 
   loadInput: inputFile [
@@ -41,5 +43,3 @@ Challenge subclass: Day1 [
     ^(line tokenize: '\s+') collect: #asNumber proc
   ]
 ]
-
-ctx solve: Day1.

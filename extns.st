@@ -1,3 +1,5 @@
+"Extensions to the standard library"
+
 Symbol extend [
   proc [ ^[:obj| obj perform: self] ]
   with: arg [
@@ -8,18 +10,36 @@ Symbol extend [
   ]
 ]
 
+String extend [
+  padStartWith: padd toSize: size [
+    ^ (1 to: (size - self size)) inject: self into: [:s :x| padd,s].
+  ]
+]
+
 Object extend [
   tap: block [ block value: self ]
   ifNil: a ifNil: b [ ^(self ifNil: a) ifNil: b ]
   ifNil: a ifNil: b ifNil: c [ ^(self ifNil: a ifNil: b) ifNil: c ]
 
+  invoke: value [
+    ((self respondsTo: #value:) and: [self numArgs > 0])
+      ifTrue: [^self value: value].
+    (self respondsTo: #value:) ifTrue: [^self value].
+    ^self.
+  ]
+
   caseOf: pattern [
-    |fallback|
+    |fallback match|
+    match := [:key|
+      ((key respondsTo: #value:) or: [key respondsTo: #value])
+        ifTrue: [key invoke: self]
+        ifFalse: [key = self]
+    ].
     pattern collect: [:assoc|
-      (self = assoc key) ifTrue: [^(assoc value) value].
+      (match value: assoc key) ifTrue: [^(assoc value) invoke: self].
       (assoc key = #_) ifTrue: [fallback := assoc value].
     ].
-    ^fallback ifNotNil: [fallback value]
+    ^fallback ifNotNil: [fallback invoke: self]
   ]
 ]
 

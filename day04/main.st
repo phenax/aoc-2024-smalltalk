@@ -1,10 +1,12 @@
-FileStream fileIn: 'utils.st'.
-ctx := (Context new: 'day04')
-  testSolutions: #(18 9);
-  solutions: #(2344 1815);
-  useTestInput: true.
-
 Challenge subclass: Day4 [
+  setup [
+    context useTestInput: true;
+      testSolutions: #(18 9);
+      solutions: #(2344 1815).
+  ]
+]
+
+Day4 extend [
   |lines rowSize colSize|
 
   loadInput: inputFile [
@@ -79,5 +81,3 @@ Challenge subclass: Day4 [
     ^(r between: 1 and: rowSize) & (c between: 1 and: colSize)
   ]
 ]
-
-ctx solve: Day4.

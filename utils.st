@@ -1,12 +1,10 @@
-FileStream fileIn: 'extns.st'.
-FileStream fileIn: 'parser.st'.
-
 Object subclass: Challenge [
-  |ctx|
-  Challenge class >> new: ctx [ ^super new initialize: ctx ]
+  |context|
+  Challenge class >> new: context [ ^super new initialize: context ]
   initialize: ctx_ [
-    ctx := ctx_.
-    ctx withInputFile: (#loadInput: on: self).
+    context := ctx_.
+    self setup.
+    context withInputFile: (#loadInput: on: self).
   ]
 
   solve [
@@ -14,15 +12,15 @@ Object subclass: Challenge [
     (self respondsTo: #solve1) ifTrue: [
       s1 := self solve1.
       'Part 1: ' display. s1 printNl.
-      (ctx solutions first) ifNotNil: [
-        self expect: s1 toEqual: ctx solutions first ].
+      (context solutions first) ifNotNil: [
+        self expect: s1 toEqual: context solutions first ].
     ].
 
     (self respondsTo: #solve2) ifTrue: [
       s2 := self solve2.
       'Part 2: ' display. s2 printNl.
-      (ctx solutions second) ifNotNil: [
-        self expect: s2 toEqual: ctx solutions second ].
+      (context solutions second) ifNotNil: [
+        self expect: s2 toEqual: context solutions second ].
     ].
   ]
 

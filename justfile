@@ -1,11 +1,11 @@
-run_ day:
-  time smalltalk --no-gc-message {{day}}/main.st
+main *args:
+  smalltalk --no-gc-message main.st -a {{args}}
 
 run day:
-  just run_ $(printf 'day%02d' {{day}});
+  time just main {{day}}
 
 watch day:
   nodemon --exec 'clear && just run {{day}}' -e .st
 
 runall:
-  find . -iname 'day*' | sort | xargs -i just run_ {}
+  find . -iname 'day*' | sed 's/^.*day0*//' | sort | xargs -i just run {}

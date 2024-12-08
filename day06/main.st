@@ -1,10 +1,12 @@
-FileStream fileIn: 'utils.st'.
-ctx := (Context new: 'day06')
-  testSolutions: #(41 6);
-  solutions: #(5131 nil);
-  useTestInput: true.
-
 Challenge subclass: Day6 [
+  setup [
+    context useTestInput: true;
+      testSolutions: #(41 6);
+      solutions: #(5131 nil).
+  ]
+]
+
+Day6 extend [
   |grid guardStartPosition guardStartDirection|
 
   loadInput: inputFile [
@@ -123,5 +125,3 @@ Challenge subclass: Day6 [
     '' displayNl.
   ]
 ]
-
-ctx solve: Day6.
