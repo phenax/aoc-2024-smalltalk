@@ -33,6 +33,30 @@ Iterable extend [
   sumWith: block [ ^(self collect: block) sum ]
   sum [ ^self inject: 0 into: [:sum :item| sum + item] ]
   product [ ^self inject: 1 into: [:sum :item| sum * item] ]
+  combinations: block [
+    |res|
+    res := self class new.
+    self do: [:item1|
+      self do: [:item2|
+        item1 ~= item2
+          ifTrue: [ res add: (block value: item1 value: item2) ].
+      ].
+    ].
+    ^res.
+  ]
+]
+
+Stream extend [
+  nextTill: block [
+    |collected|
+    collected := OrderedCollection new.
+    [self atEnd] whileFalse: [
+      (block value: self peek)
+        ifTrue: [ collected add: self next ]
+        ifFalse: [ ^collected ]
+    ].
+    ^collected.
+  ]
 ]
 
 ArrayedCollection extend [
@@ -66,6 +90,12 @@ ArrayedCollection extend [
 
   withIndexRemoved: index [
     ^(self first: index - 1), (self copyFrom: index + 1 to: self size).
+  ]
+
+  copySafely: from [ ^self copySafelyFrom: from to: from ]
+  copySafelyFrom: from to: to [
+    self size < to ifTrue: [^self class new].
+    ^self copyFrom: from to: to.
   ]
 ]
 
