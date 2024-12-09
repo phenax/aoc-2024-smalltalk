@@ -2,7 +2,7 @@ main *args:
   smalltalk --no-gc-message main.st -a {{args}}
 
 run day:
-  time just main {{day}}
+  @time just main {{day}}
 
 watch day:
   nodemon --exec 'clear && just run {{day}}' -e .st
