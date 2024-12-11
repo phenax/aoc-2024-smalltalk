@@ -24,7 +24,7 @@ Object extend [
   invoke: value [
     ((self respondsTo: #value:) and: [self numArgs > 0])
       ifTrue: [^self value: value].
-    (self respondsTo: #value:) ifTrue: [^self value].
+    (self respondsTo: #value) ifTrue: [^self value].
     ^self.
   ]
 
@@ -45,8 +45,14 @@ Object extend [
 
 Behavior extend [
   createAccessor: sym [ self createGetter: sym; createSetter: sym. ]
-  createSetter: sym [ self createSetMethod: (sym asString) ]
-  createGetter: sym [ self createGetMethod: (sym asString) ]
+  createSetter: sym [
+    (sym isArray ifTrue: [sym] ifFalse: [{sym}]) do: [:s|
+      self createSetMethod: (s asString) ].
+  ]
+  createGetter: sym [
+    (sym isArray ifTrue: [sym] ifFalse: [{sym}]) do: [:s|
+      self createGetMethod: (s asString) ].
+  ]
 ]
 
 Iterable extend [
@@ -63,6 +69,16 @@ Iterable extend [
       ].
     ].
     ^res.
+  ]
+  injectWith: collectionInit flattenedInto: block [
+    ^self inject: collectionInit into: [:items :x|
+      |res|
+      res := block value: x.
+      (res respondsTo: #do:)
+        ifTrue: [ res do: [:x| items add: x] ]
+        ifFalse: [ items add: res ].
+      items.
+    ].
   ]
 ]
 
